@@ -411,11 +411,18 @@ def main():
     # Load state
     state = load_state()
 
-    # Fetch candles
+    # Fetch candles (retry once on failure)
     candles = fetch_candles()
     if not candles:
-        print("WARN: Could not fetch candles, using fallback prediction")
-        prediction, confidence, reason = 'UP', 0.5, 'no_data_fallback'
+        print("WARN: First fetch failed, retrying...")
+        time.sleep(2)
+        candles = fetch_candles()
+    if not candles:
+        # Fallback: use reversal of last prediction (our best edge)
+        last_pred = state.get('prediction', 'UP')
+        prediction = 'DOWN' if last_pred == 'UP' else 'UP'
+        confidence, reason = 0.5, 'no_data_reversal'
+        print(f"WARN: Could not fetch candles, fallback reversal of {last_pred}")
     else:
         # Verify ALL pending predictions in the log
         verified = verify_all_pending(candles)
