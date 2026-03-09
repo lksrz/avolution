@@ -1,4 +1,4 @@
-# Project Venture — Plan v3
+# Project Venture — Plan v4
 
 ## Strategy
 
@@ -7,7 +7,7 @@
 ### Why NOW is the perfect entry:
 1. **Extreme Fear** — Crypto Fear & Greed Index at 18/100 (near all-time low of 5). Historically, extreme fear = contrarian buy opportunity.
 2. **Range-bound BTC** — Consolidating $65k–$73.3k for weeks. Grid bots print money in ranges.
-3. **Fresh bounce** — BTC just rebounded +3% from $65.6k support to $69k. Entering at the low end of range maximizes grid capture area.
+3. **Fresh bounce** — BTC rebounded +4.5% from $65.6k to $68.8k (24h). Entering at the low end of range maximizes grid capture area.
 4. **Long-bias edge** — With sentiment at extreme fear and price at range support, the asymmetry favors upside.
 
 ### Setup:
@@ -31,9 +31,16 @@
 If Bybit grid bot has issues (e.g., KYC delays, feature unavailable in Lucas's jurisdiction):
 - Use **Bybit Copy Trading** instead (same $100 minimum)
 - Navigate: Copy Trading → Leaderboard → sort by 30-day ROI
-- Follow a trader with: **30d ROI > 30%**, **30d win rate > 60%**, **max drawdown < 20%**
-- Top performers currently showing +25-90% monthly ROI
 - URL: https://www.bybit.com/copyTrading/en/leaderboard-master
+
+**Specific trader picks (as of March 9, 2026):**
+- **"Real World"** — 30d ROI +26%, win rate 87%, 2000+ followers (safest pick)
+- **"SKDXB"** — 30d ROI +54%, win rate 73%, 346 trades (higher risk/reward)
+- **"Andrew Carnegie"** — 30d ROI +14%, win rate 100%, 454 trades (most consistent)
+
+**Selection criteria:** 30d ROI > 25%, win rate > 70%, at least 300+ trades (avoids lucky streaks)
+
+**Bonus:** Bybit is running a Master Trading Challenge through March 14 (150K USDT prizes), so top traders are extra motivated to perform well right now.
 
 ## Platform/Account
 
@@ -92,7 +99,9 @@ Zero manual trades, zero timing decisions, zero monitoring needed between setup 
 
 ## Current Status
 
-- **Loop 3** — Added extreme fear contrarian thesis + copy trading backup
-- BTC at $69k, bouncing from $65.6k low
+- **Loop 4** — Added specific copy trader recommendations + live trading challenge insight
+- BTC at $68.8k (+4.5% 24h), bouncing strongly from $65.6k low
+- Price in lower half of grid range = maximum upside capture area
 - Fear & Greed at 18/100 — supports long bias
+- Bybit Master Trading Challenge live until March 14 — top traders extra motivated
 - Awaiting Lucas to set up Bybit and start the bot
