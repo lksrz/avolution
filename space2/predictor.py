@@ -192,6 +192,9 @@ def predict(candles):
     else:
         price_change_10 = 0
 
+    # Signal 13: Last candle reversal (simple mean reversion)
+    last_dir = 1 if closed[-1]['close'] > closed[-1]['open'] else -1
+
     # Combine signals — continuous (no dead zones)
     signals = {}
     score = 0.0
@@ -211,13 +214,13 @@ def predict(candles):
     score += s
     signals['mom'] = s
 
-    # Price trend 5-candle — continuous, proportional
-    s = max(-0.20, min(0.20, price_change_5 * 200))
+    # Price trend 5-candle — continuous, proportional (capped lower to avoid dominance)
+    s = max(-0.12, min(0.12, price_change_5 * 120))
     score += s
     signals['t5'] = s
 
     # Price trend 10-candle — continuous, proportional
-    s = max(-0.15, min(0.15, price_change_10 * 100))
+    s = max(-0.10, min(0.10, price_change_10 * 80))
     score += s
     signals['t10'] = s
 
@@ -253,6 +256,11 @@ def predict(candles):
         s = -last_dir * 0.10
         score += s
         signals['alt'] = s
+
+    # Last candle reversal (mean reversion — 5m candles alternate ~60-67%)
+    s = -last_dir * 0.12
+    score += s
+    signals['rev'] = s
 
     # High volume + strong body = continuation
     if vol_ratio > 1.3 and body_ratio > 0.5:

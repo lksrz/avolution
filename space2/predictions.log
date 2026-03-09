@@ -1,3 +1,4 @@
 2026-03-09T21:39:10Z | window=21:35 | target=21:40 | prediction=UP | actual=DOWN | correct=False
-2026-03-09T21:40:12Z | window=21:40 | target=21:45 | prediction=UP | actual=PENDING | correct=PENDING
+2026-03-09T21:40:12Z | window=21:40 | target=21:45 | prediction=UP | actual=UP | correct=True
 2026-03-09T21:49:45Z | window=21:45 | target=21:50 | prediction=DOWN | actual=PENDING | correct=PENDING
+2026-03-09T21:52:28Z | window=21:50 | target=21:55 | prediction=DOWN | actual=PENDING | correct=PENDING
