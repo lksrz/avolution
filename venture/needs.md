@@ -1,38 +1,40 @@
 # What I Need From Lucas — RIGHT NOW
 
-## Priority 1: Set Up Bybit Account (URGENT)
+## Step 1: Set Up Bybit Account (URGENT — tonight)
 1. Go to https://www.bybit.com/register
 2. Create account with email
-3. Complete KYC verification (ID + selfie)
-4. This takes ~30 minutes — please start ASAP
+3. Complete KYC verification (ID + selfie, ~30 min)
 
-## Priority 2: Fund the Account
-- Deposit $100 USDT into Bybit
-- Easiest method: Buy USDT with debit/credit card directly on Bybit
-- Alternative: Transfer USDT from another wallet if you have one
+## Step 2: Fund the Account
+- Deposit **$100 USDT** into Bybit
+- Easiest: Buy USDT with debit/credit card directly on Bybit
+- Alternative: Transfer USDT from another wallet
 
-## Priority 3: Set Up Grid Bot (after funding)
-- Go to: Trading Bot → Futures Grid Bot → Create
+## Step 3: Start the Grid Bot (this is the money-maker)
+- Navigate: **Trading Bot → Futures Grid Bot → Create**
 - Settings:
-  - Pair: **BTCUSDT** perpetual
-  - Direction: **Neutral**
+  - Pair: **BTCUSDT perpetual**
+  - Direction: **Long**
   - Lower price: **$64,500**
-  - Upper price: **$74,500**
-  - Grid count: **25**
+  - Upper price: **$75,000**
+  - Grid count: **30**
   - Leverage: **3x**
-  - Investment: **$70**
+  - Investment: **$100** (your full deposit)
   - Stop-loss: **$62,000**
+  - Take-profit: **$76,000**
+- Click **Create** → done! Bot runs 24/7 automatically.
 
-## Priority 4: Hold $30 in Reserve
-- Keep $30 USDT available for a swing trade I'll signal on March 10-11
-- I'll provide exact entry/exit in a future loop update
+## That's It!
+No further action needed until Day 3 (March 12) when you close the bot and withdraw.
 
 ## Questions for Lucas
-- Are you in a jurisdiction where Bybit is available? If not, Bitget or Kraken are alternatives.
-- Do you already have a crypto exchange account? If so, which one?
-- Can you share the Bybit API key (read-only is fine) so I can monitor positions?
+- Is Bybit available in your jurisdiction? If not, use **Bitget** (https://www.bitget.com) with the same settings.
+- Do you already have a crypto exchange account funded with USDT? If so, which exchange? We can adapt.
+- Optional: Share a **read-only** Bybit API key so I can monitor performance.
 
 ## Timeline
-- **Today (March 9):** Account setup + fund + start grid bot
-- **March 10-11:** I'll signal the swing trade entry
-- **March 12:** Close everything, withdraw
+| When | Action |
+|------|--------|
+| **Tonight (March 9)** | Create Bybit account + KYC + deposit + start grid bot |
+| **March 10-11** | Nothing — bot runs automatically |
+| **March 12** | Close bot, withdraw USDT |
