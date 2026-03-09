@@ -127,7 +127,7 @@ def predict(candles):
     closed = candles[:-1]
     closes = [c['close'] for c in closed]
 
-    # Signal 1: Recent momentum (last 3 candles)
+    # Signal 1: Recent momentum (last 3 candles direction)
     recent = closed[-3:]
     recent_dirs = [1 if c['close'] > c['open'] else -1 for c in recent]
     momentum = sum(recent_dirs) / len(recent_dirs)
@@ -180,76 +180,91 @@ def predict(candles):
     else:
         alternating = False
 
-    # Combine signals
+    # Signal 11: Price trend (close-to-close over last 5 candles)
+    if len(closes) >= 6:
+        price_change_5 = (closes[-1] - closes[-6]) / closes[-6]
+    else:
+        price_change_5 = 0
+
+    # Signal 12: Price trend (close-to-close over last 10 candles)
+    if len(closes) >= 11:
+        price_change_10 = (closes[-1] - closes[-11]) / closes[-11]
+    else:
+        price_change_10 = 0
+
+    # Combine signals — continuous (no dead zones)
+    signals = {}
     score = 0.0
-    reasons = []
 
-    # Mean reversion on strong streaks
+    # Mean reversion on strong streaks (4+ same direction)
     if streak_down >= 4:
-        score += 0.35
-        reasons.append('mean_rev_dn')
+        s = 0.30
+        score += s
+        signals['mr_dn'] = s
     elif streak_up >= 4:
-        score -= 0.35
-        reasons.append('mean_rev_up')
+        s = -0.30
+        score += s
+        signals['mr_up'] = s
 
-    # Momentum (follow trend if not extreme)
-    if abs(momentum) < 0.8:
-        score += momentum * 0.15
-        reasons.append(f'mom={momentum:.2f}')
+    # Short momentum (last 3 candle direction) — continuous
+    s = momentum * 0.10
+    score += s
+    signals['mom'] = s
 
-    # SMA deviation (mean revert)
-    if abs(price_vs_sma) > 0.0005:
-        score -= price_vs_sma * 60
-        reasons.append(f'sma={price_vs_sma:.4f}')
+    # Price trend 5-candle — continuous, proportional
+    s = max(-0.20, min(0.20, price_change_5 * 200))
+    score += s
+    signals['t5'] = s
 
-    # RSI signal
-    if rsi > 70:
-        score -= 0.3
-        reasons.append(f'rsi={rsi:.0f}')
-    elif rsi < 30:
-        score += 0.3
-        reasons.append(f'rsi={rsi:.0f}')
-    elif rsi > 60:
-        score -= 0.1
-    elif rsi < 40:
-        score += 0.1
+    # Price trend 10-candle — continuous, proportional
+    s = max(-0.15, min(0.15, price_change_10 * 100))
+    score += s
+    signals['t10'] = s
 
-    # EMA crossover
-    if abs(ema_diff) > 0.0003:
-        score += ema_diff * 40
-        reasons.append(f'ema={ema_diff:.4f}')
+    # SMA deviation (mean revert) — continuous
+    s = max(-0.20, min(0.20, -price_vs_sma * 40))
+    score += s
+    signals['sma'] = s
 
-    # Bollinger Bands mean reversion
-    if bb_pos > 0.9:
-        score -= 0.25
-        reasons.append('bb_high')
-    elif bb_pos < 0.1:
-        score += 0.25
-        reasons.append('bb_low')
-    elif bb_pos > 0.75:
-        score -= 0.1
-    elif bb_pos < 0.25:
-        score += 0.1
+    # RSI — continuous, centered at 50
+    s = -(rsi - 50) / 100 * 0.30
+    score += s
+    signals['rsi'] = s
 
-    # Current candle momentum (incomplete - use cautiously)
-    if abs(cur_move) > 0.001 and cur_vol_ratio > 0.3:
-        # Strong move on the current candle suggests continuation into next
-        score += (1 if cur_move > 0 else -1) * 0.1
-        reasons.append(f'cur={cur_move:.4f}')
+    # EMA crossover — continuous
+    s = max(-0.15, min(0.15, ema_diff * 40))
+    score += s
+    signals['ema'] = s
+
+    # Bollinger Bands — continuous, centered at 0.5
+    s = -(bb_pos - 0.5) * 0.30
+    score += s
+    signals['bb'] = s
+
+    # Current candle momentum (incomplete) — continuous
+    if cur_vol_ratio > 0.15:
+        s = max(-0.10, min(0.10, cur_move * 80))
+        score += s
+        signals['cur'] = s
 
     # Alternation pattern
     if alternating and len(closed) >= 4:
         last_dir = 1 if closed[-1]['close'] > closed[-1]['open'] else -1
-        score -= last_dir * 0.15
-        reasons.append('alt')
+        s = -last_dir * 0.10
+        score += s
+        signals['alt'] = s
 
-    # High volume with strong body = continuation
-    if vol_ratio > 1.5 and body_ratio > 0.6:
-        if last_body > 0:
-            score += 0.12
-        else:
-            score -= 0.12
-        reasons.append(f'vol={vol_ratio:.1f}')
+    # High volume + strong body = continuation
+    if vol_ratio > 1.3 and body_ratio > 0.5:
+        s = 0.08 if last_body > 0 else -0.08
+        score += s
+        signals['vol'] = s
+
+    # Debug: print all signal contributions
+    sig_str = ' '.join(f'{k}={v:+.3f}' for k, v in sorted(signals.items()))
+    print(f"  Signals: {sig_str}")
+    print(f"  Score: {score:+.4f} | RSI={rsi:.1f} BB={bb_pos:.2f} EMA_diff={ema_diff:.5f}")
+    print(f"  Trend5={price_change_5:+.5f} Trend10={price_change_10:+.5f}")
 
     # Final decision
     if score > 0:
@@ -258,10 +273,10 @@ def predict(candles):
         prediction = 'DOWN'
     else:
         prediction = 'UP' if closed[-1]['close'] > closed[-1]['open'] else 'DOWN'
-        reasons.append('tie')
+        signals['tie'] = 0
 
     confidence = min(0.5 + abs(score) * 0.2, 0.85)
-    reason = '+'.join(reasons) if reasons else 'neutral'
+    reason = '+'.join(f'{k}' for k in signals.keys())
 
     return prediction, confidence, reason
 
