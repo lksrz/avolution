@@ -101,6 +101,19 @@ def calc_ema(values, period):
     return ema
 
 
+def calc_bollinger(closes, period=20, std_mult=2.0):
+    """Calculate Bollinger Bands. Returns (upper, middle, lower)."""
+    if len(closes) < period:
+        period = len(closes)
+    if period < 2:
+        return closes[-1] + 1, closes[-1], closes[-1] - 1
+    recent = closes[-period:]
+    middle = sum(recent) / len(recent)
+    variance = sum((x - middle) ** 2 for x in recent) / len(recent)
+    std = variance ** 0.5
+    return middle + std_mult * std, middle, middle - std_mult * std
+
+
 def predict(candles):
     """
     Predict next candle direction using multiple signals.
@@ -148,6 +161,24 @@ def predict(candles):
     ema_slow = calc_ema(closes, 12)
     ema_diff = (ema_fast - ema_slow) / ema_slow if ema_slow else 0
 
+    # Signal 8: Bollinger Bands position
+    bb_upper, bb_mid, bb_lower = calc_bollinger(closes, 15)
+    bb_range = bb_upper - bb_lower
+    bb_pos = (last_price - bb_lower) / bb_range if bb_range > 0 else 0.5
+
+    # Signal 9: Current (incomplete) candle momentum
+    current = candles[-1]  # incomplete candle
+    cur_move = (current['close'] - current['open']) / current['open'] if current['open'] else 0
+    cur_vol = current['volume']
+    cur_vol_ratio = cur_vol / avg_vol if avg_vol > 0 else 1.0
+
+    # Signal 10: Alternation pattern (UP/DOWN/UP/DOWN)
+    if len(closed) >= 4:
+        last4_dirs = [1 if c['close'] > c['open'] else -1 for c in closed[-4:]]
+        alternating = all(last4_dirs[i] != last4_dirs[i+1] for i in range(3))
+    else:
+        alternating = False
+
     # Combine signals
     score = 0.0
     reasons = []
@@ -155,28 +186,28 @@ def predict(candles):
     # Mean reversion on strong streaks
     if streak_down >= 4:
         score += 0.35
-        reasons.append('mean_rev_down_streak')
+        reasons.append('mean_rev_dn')
     elif streak_up >= 4:
         score -= 0.35
-        reasons.append('mean_rev_up_streak')
+        reasons.append('mean_rev_up')
 
     # Momentum (follow trend if not extreme)
     if abs(momentum) < 0.8:
-        score += momentum * 0.2
+        score += momentum * 0.15
         reasons.append(f'mom={momentum:.2f}')
 
     # SMA deviation (mean revert)
     if abs(price_vs_sma) > 0.0005:
-        score -= price_vs_sma * 80
+        score -= price_vs_sma * 60
         reasons.append(f'sma={price_vs_sma:.4f}')
 
     # RSI signal
     if rsi > 70:
-        score -= 0.3  # Overbought, predict down
-        reasons.append(f'rsi_ob={rsi:.0f}')
+        score -= 0.3
+        reasons.append(f'rsi={rsi:.0f}')
     elif rsi < 30:
-        score += 0.3  # Oversold, predict up
-        reasons.append(f'rsi_os={rsi:.0f}')
+        score += 0.3
+        reasons.append(f'rsi={rsi:.0f}')
     elif rsi > 60:
         score -= 0.1
     elif rsi < 40:
@@ -184,15 +215,39 @@ def predict(candles):
 
     # EMA crossover
     if abs(ema_diff) > 0.0003:
-        score += ema_diff * 50
+        score += ema_diff * 40
         reasons.append(f'ema={ema_diff:.4f}')
+
+    # Bollinger Bands mean reversion
+    if bb_pos > 0.9:
+        score -= 0.25
+        reasons.append('bb_high')
+    elif bb_pos < 0.1:
+        score += 0.25
+        reasons.append('bb_low')
+    elif bb_pos > 0.75:
+        score -= 0.1
+    elif bb_pos < 0.25:
+        score += 0.1
+
+    # Current candle momentum (incomplete - use cautiously)
+    if abs(cur_move) > 0.001 and cur_vol_ratio > 0.3:
+        # Strong move on the current candle suggests continuation into next
+        score += (1 if cur_move > 0 else -1) * 0.1
+        reasons.append(f'cur={cur_move:.4f}')
+
+    # Alternation pattern
+    if alternating and len(closed) >= 4:
+        last_dir = 1 if closed[-1]['close'] > closed[-1]['open'] else -1
+        score -= last_dir * 0.15
+        reasons.append('alt')
 
     # High volume with strong body = continuation
     if vol_ratio > 1.5 and body_ratio > 0.6:
         if last_body > 0:
-            score += 0.15
+            score += 0.12
         else:
-            score -= 0.15
+            score -= 0.12
         reasons.append(f'vol={vol_ratio:.1f}')
 
     # Final decision
@@ -202,9 +257,9 @@ def predict(candles):
         prediction = 'DOWN'
     else:
         prediction = 'UP' if closed[-1]['close'] > closed[-1]['open'] else 'DOWN'
-        reasons.append('tiebreaker')
+        reasons.append('tie')
 
-    confidence = min(0.5 + abs(score) * 0.25, 0.85)
+    confidence = min(0.5 + abs(score) * 0.2, 0.85)
     reason = '+'.join(reasons) if reasons else 'neutral'
 
     return prediction, confidence, reason
@@ -261,23 +316,33 @@ def update_log_with_result(result):
 
 
 def log_prediction(window_info, prediction, confidence, reason):
-    """Append prediction to log."""
+    """Log prediction. Updates existing PENDING entry if prediction changed."""
     ts = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
-    line = (f"{ts} | window={window_info['window_label']} | "
-            f"target={window_info['target_label']} | prediction={prediction} | "
-            f"actual=PENDING | correct=PENDING")
+    new_line = (f"{ts} | window={window_info['window_label']} | "
+                f"target={window_info['target_label']} | prediction={prediction} | "
+                f"actual=PENDING | correct=PENDING\n")
 
-    # Check if we already predicted this window
     if os.path.exists(PREDICTIONS_LOG):
+        lines = []
         with open(PREDICTIONS_LOG) as f:
-            for existing in f:
-                if f"target={window_info['target_label']}" in existing and 'actual=PENDING' in existing:
-                    print(f"Already predicted for target={window_info['target_label']}, skipping log")
+            lines = f.readlines()
+
+        for i, line in enumerate(lines):
+            if f"target={window_info['target_label']}" in line and 'actual=PENDING' in line:
+                # Check if prediction changed
+                if f"prediction={prediction}" in line:
+                    print(f"Already predicted {prediction} for target={window_info['target_label']}, no change")
                     return
+                # Update with new prediction
+                lines[i] = new_line
+                with open(PREDICTIONS_LOG, 'w') as f:
+                    f.writelines(lines)
+                print(f"Updated prediction for target={window_info['target_label']} to {prediction}")
+                return
 
     with open(PREDICTIONS_LOG, 'a') as f:
-        f.write(line + '\n')
-    print(f"Logged: {line}")
+        f.write(new_line)
+    print(f"Logged: {new_line.strip()}")
 
 
 def main():
