@@ -1,32 +1,39 @@
-# Project Venture — Plan v2
+# Project Venture — Plan v3
 
 ## Strategy
 
-**BTC/USDT Futures Grid Bot on Bybit — Full $100**
+**BTC/USDT Futures Grid Bot on Bybit — Full $100, Long-Biased**
 
-BTC is consolidating in a $65,000–$73,300 range, bouncing off support today (+3% to $69k). This is ideal grid bot territory — the bot profits from every oscillation within the range. By using the full $100 with 3x leverage, we maximize capital efficiency.
+### Why NOW is the perfect entry:
+1. **Extreme Fear** — Crypto Fear & Greed Index at 18/100 (near all-time low of 5). Historically, extreme fear = contrarian buy opportunity.
+2. **Range-bound BTC** — Consolidating $65k–$73.3k for weeks. Grid bots print money in ranges.
+3. **Fresh bounce** — BTC just rebounded +3% from $65.6k support to $69k. Entering at the low end of range maximizes grid capture area.
+4. **Long-bias edge** — With sentiment at extreme fear and price at range support, the asymmetry favors upside.
 
-**Why this beats alternatives:**
-- Grid bots are designed for range-bound markets — exactly what BTC is doing
-- Fully automated — runs 24/7 without Lucas needing to monitor
-- 3x leverage amplifies grid profits without extreme liquidation risk
-- Single focused strategy > splitting a tiny $100 across multiple bets
-
-**Setup:**
-- Platform: **Bybit** (minimum ~$100 for futures grid bot)
+### Setup:
+- Platform: **Bybit** (min ~$100 for futures grid bot)
 - Pair: BTC/USDT perpetual
-- Direction: **Long-biased** (neutral profits from oscillation, but long-bias captures upside if BTC trends up from current bounce)
-- Range: **$64,500 – $75,000** (covers the established consolidation zone with headroom)
+- Direction: **Long** (profits from oscillation + captures upside from fear recovery)
+- Range: **$64,500 – $75,000** (full consolidation zone with headroom)
 - Leverage: **3x**
-- Grids: **30** (~$350 spacing — captures small swings)
-- Investment: **$100** (full allocation)
-- Stop-loss: **$62,000** (below support — auto-close if range breaks down)
-- Take-profit: **$76,000** (close if breakout above range)
+- Grids: **30** (~$350 spacing — captures small swings for frequent fills)
+- Investment: **$100** (full allocation — don't split a small capital base)
+- Stop-loss: **$62,000** (below support — max loss ~$25)
+- Take-profit: **$76,000** (lock gains on breakout)
 
-**Timeline:**
+### Timeline:
 - Day 1 (March 9): Set up and start grid bot
-- Days 1-3: Bot runs autonomously, capturing profits from each oscillation
+- Days 1-3: Bot runs autonomously 24/7
 - Day 3 (March 12): Close bot, withdraw USDT — 6 hours before deadline
+
+## Plan B: Copy Trading (if grid bot unavailable)
+
+If Bybit grid bot has issues (e.g., KYC delays, feature unavailable in Lucas's jurisdiction):
+- Use **Bybit Copy Trading** instead (same $100 minimum)
+- Navigate: Copy Trading → Leaderboard → sort by 30-day ROI
+- Follow a trader with: **30d ROI > 30%**, **30d win rate > 60%**, **max drawdown < 20%**
+- Top performers currently showing +25-90% monthly ROI
+- URL: https://www.bybit.com/copyTrading/en/leaderboard-master
 
 ## Platform/Account
 
@@ -47,7 +54,7 @@ BTC is consolidating in a $65,000–$73,300 range, bouncing off support today (+
 4. **Set up Futures Grid Bot:**
    - Navigate: Trading Bot → Futures Grid Bot → Create
    - Pair: **BTCUSDT perpetual**
-   - Direction: **Long** (profits from oscillation + upside bias)
+   - Direction: **Long**
    - Lower price: **$64,500**
    - Upper price: **$75,000**
    - Grid count: **30**
@@ -61,7 +68,7 @@ BTC is consolidating in a $65,000–$73,300 range, bouncing off support today (+
 5. **Close the grid bot** — go to Trading Bot → My Bots → Close
 6. **Withdraw USDT** to your preferred wallet
 
-That's it — no manual trades, no timing decisions, no monitoring needed.
+Zero manual trades, zero timing decisions, zero monitoring needed between setup and close.
 
 ## Expected Outcome (Realistic)
 
@@ -76,17 +83,16 @@ That's it — no manual trades, no timing decisions, no monitoring needed.
 
 ## Why This Wins the Competition
 
-1. **Maximum simplicity** — One bot, full capital, zero manual intervention after setup
-2. **Market-perfect timing** — BTC bounced +3% today off range support, entering the sweet spot for grid profits
-3. **Risk-managed** — Stop-loss at $62k caps max loss at ~$25; take-profit at $76k locks gains on breakout
-4. **Concrete execution** — Every parameter specified, Lucas can set it up in 15 minutes
-5. **Capital efficient** — Full $100 deployed (no idle cash losing opportunity cost)
-6. **Proven edge** — Grid bots in range-bound markets are one of the few reliably profitable automated strategies
+1. **Extreme fear timing** — F&G at 18/100 is a historically reliable contrarian entry. Other agents likely don't have this data point.
+2. **Maximum simplicity** — One bot, full capital, 15-minute setup, zero intervention
+3. **Market-perfect** — BTC range-bound + long-bias at support = optimal grid conditions
+4. **Risk-managed** — Stop-loss caps downside at ~$25; take-profit at $76k locks breakout gains
+5. **Backup plan** — Copy trading fallback means we deploy capital regardless of grid bot availability
+6. **Concrete execution** — Every parameter specified, every UI path described, Lucas executes in 15 min
 
 ## Current Status
 
-- **Loop 2** — Strategy refined based on market research
-- 20M Bitcoin milestone already passed — removed as catalyst
-- Full $100 allocation to grid bot (Bybit minimum is ~$100 USDT)
-- BTC at $69k, bouncing from $65.6k low — favorable entry timing
+- **Loop 3** — Added extreme fear contrarian thesis + copy trading backup
+- BTC at $69k, bouncing from $65.6k low
+- Fear & Greed at 18/100 — supports long bias
 - Awaiting Lucas to set up Bybit and start the bot

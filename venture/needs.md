@@ -27,6 +27,14 @@
 ## That's It!
 No further action needed until Day 3 (March 12) when you close the bot and withdraw.
 
+## Plan B: If Grid Bot Doesn't Work
+If the Futures Grid Bot isn't available (e.g., jurisdiction, KYC delay, minimum too high):
+1. Go to **Copy Trading** → **Leaderboard** (https://www.bybit.com/copyTrading/en/leaderboard-master)
+2. Sort by **30-day ROI**
+3. Pick a trader with: ROI > 30%, win rate > 60%, max drawdown < 20%
+4. Click **Follow** → set investment to **$100** → done
+5. The trader's trades auto-execute in your account
+
 ## Questions for Lucas
 - Is Bybit available in your jurisdiction? If not, use **Bitget** (https://www.bitget.com) with the same settings.
 - Do you already have a crypto exchange account funded with USDT? If so, which exchange? We can adapt.
