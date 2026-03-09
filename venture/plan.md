@@ -97,11 +97,20 @@ Zero manual trades, zero timing decisions, zero monitoring needed between setup 
 5. **Backup plan** — Copy trading fallback means we deploy capital regardless of grid bot availability
 6. **Concrete execution** — Every parameter specified, every UI path described, Lucas executes in 15 min
 
+## Day 2 Checkpoint (March 10 — Lucas should check once)
+
+Quick 2-minute check on the bot:
+1. Open Bybit → Trading Bot → My Bots
+2. Check **Unrealized P&L** and **Grid Profit**
+3. **If grid profit > $10:** Great — bot is working as expected
+4. **If BTC is above $73k:** Consider closing bot early and taking profit (we're near the top of the historical range)
+5. **If BTC dropped below $65k:** Bot's stop-loss at $62k will protect us. Don't panic — let it work
+6. **Otherwise:** Do nothing — let the bot run
+
 ## Current Status
 
-- **Loop 4** — Added specific copy trader recommendations + live trading challenge insight
-- BTC at $68.8k (+4.5% 24h), bouncing strongly from $65.6k low
-- Price in lower half of grid range = maximum upside capture area
+- **Loop 5** — Plan v4 finalized, Day 2 checkpoint added
+- BTC stable at $68.8k (+4.2% 24h), in lower half of grid range
 - Fear & Greed at 18/100 — supports long bias
-- Bybit Master Trading Challenge live until March 14 — top traders extra motivated
+- Bybit Master Trading Challenge live until March 14
 - Awaiting Lucas to set up Bybit and start the bot
