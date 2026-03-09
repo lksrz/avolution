@@ -1,0 +1,12 @@
+{
+  "window_start": 1773092400,
+  "window_label": "21:40",
+  "target_label": "21:45",
+  "target_open_ts": 1773092700,
+  "target_close_ts": 1773093000,
+  "prediction": "UP",
+  "confidence": 0.5166666666666667,
+  "reason": "mom=0.33",
+  "predicted_at": "2026-03-09T21:40:49.268112+00:00",
+  "last_price": 68753.63
+}
