@@ -206,7 +206,7 @@ def predict(candles):
         score += s
         signals['mr_dn'] = s
     elif streak_up >= 4:
-        s = -0.15 if (price_change_5 > 0.001 and price_change_10 > 0.0005) else -0.30
+        s = -0.10 if (price_change_5 > 0.001 and price_change_10 > 0.0005) else -0.20
         score += s
         signals['mr_up'] = s
 
