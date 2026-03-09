@@ -375,6 +375,29 @@ def log_prediction(window_info, prediction, confidence, reason):
     print(f"Logged: {new_line.strip()}")
 
 
+def print_accuracy():
+    """Print accuracy stats from log (read-only, never influences predictions)."""
+    if not os.path.exists(PREDICTIONS_LOG):
+        return
+    correct = 0
+    wrong = 0
+    pending = 0
+    with open(PREDICTIONS_LOG) as f:
+        for line in f:
+            if 'correct=True' in line:
+                correct += 1
+            elif 'correct=False' in line:
+                wrong += 1
+            elif 'actual=PENDING' in line:
+                pending += 1
+    total = correct + wrong
+    if total > 0:
+        pct = correct / total * 100
+        print(f"ACCURACY: {correct}/{total} ({pct:.0f}%) + {pending} pending")
+    else:
+        print(f"ACCURACY: no verified predictions yet, {pending} pending")
+
+
 def main():
     print("=" * 60)
     print("PREDICTOR RUN")
@@ -401,6 +424,9 @@ def main():
 
         # Make prediction
         prediction, confidence, reason = predict(candles)
+
+    # Show accuracy stats (read-only)
+    print_accuracy()
 
     print(f"PREDICTION: {prediction} (confidence={confidence:.2f}, reason={reason})")
 
