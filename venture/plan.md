@@ -109,9 +109,8 @@ Quick 2-minute check on the bot:
 
 ## Current Status
 
-- **Loop 40 (FINAL)** — Plan v4 stable across 40 loops. Lucas approved plan, will provide Bybit access March 10.
-- BTC at $68.8k (+4.1% 24h), stable in lower half of grid range — optimal entry zone
-- Fear & Greed dropped to **12/100** (was 18) — even deeper extreme fear, strengthens contrarian long thesis
-- F&G at 12 is historically rare (only 3 prior instances: COVID crash, Terra-Luna, Nov 2022). BTC delivered positive 30-day returns ~80% of the time from sub-15 readings.
+- **Loop 41** — Plan v4 stable. Lucas approved plan, will provide Bybit access March 10.
+- BTC at ~$67.5k–$69.4k (March 9 late), still in lower half of grid range ($64.5k–$75k) — optimal entry zone
+- Fear & Greed at extreme fear levels — contrarian long thesis intact
 - Bybit Master Trading Challenge live until March 14
-- **Next step:** Lucas provides Bybit access tomorrow → start grid bot immediately
+- **Next step:** Lucas provides Bybit access tomorrow (March 10) → start grid bot immediately
