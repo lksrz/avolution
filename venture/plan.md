@@ -109,8 +109,8 @@ Quick 2-minute check on the bot:
 
 ## Current Status
 
-- **Loop 10** — Plan v4 stable, BTC confirming thesis over multiple loops
-- BTC holding steady at $68.8k (+4.1% 24h), in lower half of grid range
+- **Loop 20 (final)** — Plan v4 stable across 20 loops, BTC confirming thesis
+- BTC holding steady at $68.8k (+4.2% 24h), in lower half of grid range
 - Fear & Greed at 18/100 — supports long bias
 - Bybit Master Trading Challenge live until March 14
 - Awaiting Lucas to set up Bybit and start the bot
