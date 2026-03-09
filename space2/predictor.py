@@ -2,6 +2,7 @@
 """BTC/USDT 5-minute candle predictor for Avolution survival loop."""
 
 import json
+import re
 import time
 import sys
 import os
@@ -265,54 +266,60 @@ def predict(candles):
     return prediction, confidence, reason
 
 
-def verify_previous(candles, state):
-    """Check if previous prediction's target candle has closed."""
-    if 'target_open_ts' not in state or 'prediction' not in state:
-        return None
+def verify_all_pending(candles):
+    """Scan predictions.log for all PENDING entries and verify against candle data."""
+    if not candles or not os.path.exists(PREDICTIONS_LOG):
+        return 0
 
-    target_ts_ms = state['target_open_ts'] * 1000
-    target_close_ts = state.get('target_close_ts', state['target_open_ts'] + 300)
-
-    # Only verify if target candle should be closed
-    if time.time() < target_close_ts:
-        return None
-
+    # Build lookup: candle open_time HH:MM -> candle data
+    candle_map = {}
     for c in candles:
-        if c['open_time'] == target_ts_ms:
-            actual = 'UP' if c['close'] > c['open'] else 'DOWN'
-            correct = actual == state['prediction']
-            return {
-                'window': state.get('window_label', '??'),
-                'target': state.get('target_label', '??'),
-                'prediction': state['prediction'],
-                'actual': actual,
-                'correct': correct,
-            }
-    return None
-
-
-def update_log_with_result(result):
-    """Update the predictions.log with actual result."""
-    if not os.path.exists(PREDICTIONS_LOG):
-        return
+        label = datetime.fromtimestamp(c['open_time'] / 1000, tz=timezone.utc).strftime('%H:%M')
+        candle_map[label] = c
 
     lines = []
     with open(PREDICTIONS_LOG) as f:
         lines = f.readlines()
 
-    updated = False
-    for i, line in enumerate(lines):
-        if f"target={result['target']}" in line and 'actual=PENDING' in line:
-            line = line.replace('actual=PENDING', f"actual={result['actual']}")
-            line = line.replace('correct=PENDING', f"correct={result['correct']}")
-            lines[i] = line
-            updated = True
-            break
+    updated_count = 0
+    now = time.time()
 
-    if updated:
+    for i, line in enumerate(lines):
+        if 'actual=PENDING' not in line:
+            continue
+
+        # Extract target label from line
+        target_match = re.search(r'target=(\d{2}:\d{2})', line)
+        pred_match = re.search(r'prediction=(UP|DOWN)', line)
+        if not target_match or not pred_match:
+            continue
+
+        target_label = target_match.group(1)
+        prediction = pred_match.group(1)
+
+        # Check if this target candle exists and is closed
+        if target_label not in candle_map:
+            continue
+
+        candle = candle_map[target_label]
+        # The candle closes 300s after it opens
+        candle_close_time = candle['open_time'] / 1000 + 300
+        if now < candle_close_time:
+            continue  # Candle not yet closed
+
+        actual = 'UP' if candle['close'] > candle['open'] else 'DOWN'
+        correct = actual == prediction
+
+        lines[i] = line.replace('actual=PENDING', f'actual={actual}')
+        lines[i] = lines[i].replace('correct=PENDING', f'correct={correct}')
+        updated_count += 1
+        print(f"VERIFIED: target={target_label} pred={prediction} actual={actual} correct={correct}")
+
+    if updated_count > 0:
         with open(PREDICTIONS_LOG, 'w') as f:
             f.writelines(lines)
-        print(f"Updated log: target={result['target']} actual={result['actual']} correct={result['correct']}")
+
+    return updated_count
 
 
 def log_prediction(window_info, prediction, confidence, reason):
@@ -364,12 +371,10 @@ def main():
         print("WARN: Could not fetch candles, using fallback prediction")
         prediction, confidence, reason = 'UP', 0.5, 'no_data_fallback'
     else:
-        # Verify previous prediction
-        result = verify_previous(candles, state)
-        if result:
-            print(f"VERIFICATION: target={result['target']} pred={result['prediction']} "
-                  f"actual={result['actual']} correct={result['correct']}")
-            update_log_with_result(result)
+        # Verify ALL pending predictions in the log
+        verified = verify_all_pending(candles)
+        if verified:
+            print(f"Verified {verified} pending prediction(s)")
 
         # Make prediction
         prediction, confidence, reason = predict(candles)
