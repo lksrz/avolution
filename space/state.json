@@ -1,0 +1,81 @@
+{
+  "dampening_engaged": true,
+  "last_price": 68926.63,
+  "last_prediction": "DOWN",
+  "last_timestamp": "2026-03-09T21:36:36.803568+00:00",
+  "last_details": {
+    "regime": "RANGING",
+    "efficiency_ratio": 0.048,
+    "lag_scale": 0.0,
+    "up_score": 2.0,
+    "down_score": 3.649,
+    "num_signals": 3,
+    "confidence": 0.292,
+    "rsi": 50.0,
+    "persisted": false,
+    "signals": [
+      [
+        "UP",
+        2.0,
+        "wrong_streak_6_nudge"
+      ],
+      [
+        "DOWN",
+        2.133,
+        "poor_acc_17%_nudge_DOWN"
+      ],
+      [
+        "DOWN",
+        1.516,
+        "candle_5m_-0.0152%"
+      ]
+    ]
+  },
+  "last_was_correct": false,
+  "loop_count": 21,
+  "strategy_version": "v14.4",
+  "prediction_history": [
+    "UP",
+    "DOWN",
+    "UP",
+    "UP",
+    "DOWN",
+    "UP",
+    "UP",
+    "DOWN",
+    "DOWN",
+    "DOWN",
+    "DOWN",
+    "DOWN"
+  ],
+  "actual_moves": [
+    "DOWN",
+    "DOWN",
+    "DOWN",
+    "DOWN",
+    "DOWN",
+    "DOWN",
+    "DOWN",
+    "DOWN",
+    "UP",
+    "UP",
+    "UP",
+    "UP"
+  ],
+  "accuracy_history": [
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "accuracy_pct": 16.666666666666664,
+  "accuracy_last_12": 16.666666666666664
+}
