@@ -1,8 +1,8 @@
 {
-  "loop": 381,
-  "loop_start_utc": "2026-03-10T01:26:35Z",
+  "loop": 382,
+  "loop_start_utc": "2026-03-10T01:31:38Z",
   "timeout_sec": 300,
   "warn_at_sec": 240,
-  "was_killed": false,
-  "note": "Previous loop completed normally."
+  "was_killed": true,
+  "note": "You were SIGKILL'd last loop (ran out of time). Do NOT rewrite from scratch \u2014 verify existing code works, then predict."
 }
