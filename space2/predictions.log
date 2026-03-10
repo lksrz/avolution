@@ -30,4 +30,4 @@
 2026-03-10T00:00:37Z | window=00:00 | target=00:05 | prediction=UP | actual=UP | correct=True
 2026-03-10T00:05:01Z | window=00:05 | target=00:10 | prediction=DOWN | actual=DOWN | correct=True
 2026-03-10T00:10:13Z | window=00:10 | target=00:15 | prediction=DOWN | actual=PENDING | correct=PENDING
-2026-03-10T00:15:10Z | window=00:15 | target=00:20 | prediction=DOWN | actual=PENDING | correct=PENDING
+2026-03-10T00:16:38Z | window=00:15 | target=00:20 | prediction=UP | actual=PENDING | correct=PENDING
