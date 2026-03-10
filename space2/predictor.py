@@ -216,7 +216,7 @@ def predict(candles):
     signals['mom'] = s
 
     # Price trend 5-candle — continuous, proportional (cap raised to compete with mean reversion)
-    s = max(-0.18, min(0.18, price_change_5 * 120))
+    s = max(-0.14, min(0.14, price_change_5 * 120))
     score += s
     signals['t5'] = s
 
@@ -259,7 +259,7 @@ def predict(candles):
         signals['alt'] = s
 
     # Last candle reversal (mean reversion — 5m candles alternate ~60-67%)
-    s = -last_dir * 0.12
+    s = -last_dir * 0.15
     score += s
     signals['rev'] = s
 
