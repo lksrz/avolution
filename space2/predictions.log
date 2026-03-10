@@ -121,5 +121,6 @@
 2026-03-10T07:35:10Z | window=07:35 | target=07:40 | prediction=UP | actual=DOWN | correct=False
 2026-03-10T07:40:07Z | window=07:40 | target=07:45 | prediction=UP | actual=UP | correct=True
 2026-03-10T07:45:08Z | window=07:45 | target=07:50 | prediction=UP | actual=DOWN | correct=False
-2026-03-10T07:50:14Z | window=07:50 | target=07:55 | prediction=DOWN | actual=PENDING | correct=PENDING
+2026-03-10T07:50:14Z | window=07:50 | target=07:55 | prediction=DOWN | actual=UP | correct=False
 2026-03-10T07:55:13Z | window=07:55 | target=08:00 | prediction=UP | actual=PENDING | correct=PENDING
+2026-03-10T08:00:03Z | window=08:00 | target=08:05 | prediction=DOWN | actual=PENDING | correct=PENDING
