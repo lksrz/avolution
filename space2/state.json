@@ -1,12 +1,12 @@
 {
-  "window_start": 1773126600,
-  "window_label": "07:10",
-  "target_label": "07:15",
-  "target_open_ts": 1773126900,
-  "target_close_ts": 1773127200,
+  "window_start": 1773126900,
+  "window_label": "07:15",
+  "target_label": "07:20",
+  "target_open_ts": 1773127200,
+  "target_close_ts": 1773127500,
   "prediction": "DOWN",
-  "confidence": 0.5222628479749385,
-  "reason": "mom+t5+t10+sma+rsi+ema+bb+cur+alt+rev",
-  "predicted_at": "2026-03-10T07:14:59.618976+00:00",
-  "last_price": 70240.36
+  "confidence": 0.5317332337425426,
+  "reason": "mom+t5+t10+sma+rsi+ema+bb+rev",
+  "predicted_at": "2026-03-10T07:16:42.317664+00:00",
+  "last_price": 70322.96
 }
