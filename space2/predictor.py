@@ -215,13 +215,13 @@ def predict(candles):
     score += s
     signals['mom'] = s
 
-    # Price trend 5-candle — continuous, proportional (capped lower to avoid dominance)
-    s = max(-0.12, min(0.12, price_change_5 * 120))
+    # Price trend 5-candle — continuous, proportional (cap raised to compete with mean reversion)
+    s = max(-0.18, min(0.18, price_change_5 * 120))
     score += s
     signals['t5'] = s
 
-    # Price trend 10-candle — continuous, proportional
-    s = max(-0.10, min(0.10, price_change_10 * 80))
+    # Price trend 10-candle — continuous, proportional (cap raised)
+    s = max(-0.14, min(0.14, price_change_10 * 80))
     score += s
     signals['t10'] = s
 
@@ -230,8 +230,8 @@ def predict(candles):
     score += s
     signals['sma'] = s
 
-    # RSI — continuous, centered at 50
-    s = -(rsi - 50) / 100 * 0.30
+    # RSI — continuous, centered at 50 (multiplier reduced to balance vs trend)
+    s = -(rsi - 50) / 100 * 0.22
     score += s
     signals['rsi'] = s
 
@@ -240,8 +240,8 @@ def predict(candles):
     score += s
     signals['ema'] = s
 
-    # Bollinger Bands — continuous, centered at 0.5
-    s = -(bb_pos - 0.5) * 0.30
+    # Bollinger Bands — continuous, centered at 0.5 (multiplier reduced to balance vs trend)
+    s = -(bb_pos - 0.5) * 0.22
     score += s
     signals['bb'] = s
 
