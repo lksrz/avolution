@@ -18,4 +18,6 @@
 2026-03-09T21:35:20.586179+00:00 | price=68914.00 | prediction=DOWN | confidence=0.396 | actual=UP | correct=False
 2026-03-09T21:35:44.335702+00:00 | price=68914.00 | prediction=DOWN | confidence=0.310 | actual=UP | correct=False
 2026-03-09T21:36:11.059214+00:00 | price=68920.98 | prediction=DOWN | confidence=0.348 | actual=UP | correct=False
-2026-03-09T21:36:36.803568+00:00 | price=68926.63 | prediction=DOWN | confidence=0.292 | actual=PENDING | correct=PENDING
+2026-03-09T21:36:36.803568+00:00 | price=68926.63 | prediction=DOWN | confidence=0.292 | actual=UP | correct=False
+2026-03-09T21:37:04.293702+00:00 | price=68931.60 | prediction=DOWN | confidence=0.188 | actual=UP | correct=False
+2026-03-09T21:39:37.873960+00:00 | price=68922.95 | prediction=DOWN | confidence=1.000 | actual=PENDING | correct=PENDING

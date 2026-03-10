@@ -197,39 +197,45 @@ def countdown_thread(workspace: Path, deadline: float, stop_event: threading.Eve
     except Exception:
         pass
 
-def check_prediction_liveness(workspace: Path, log) -> bool:
-    """Return False (kill project) if 2 consecutive 5-min windows have no prediction."""
+def check_survival(workspace: Path, log) -> bool:
+    """Return False (kill project) if accuracy or liveness rules are violated."""
     plog = workspace / "predictions.log"
     if not plog.exists():
-        return True  # no log yet, agent still starting up
+        return True
 
-    now = time.time()
-    window_sec = 300  # 5 minutes
-
-    # Read last prediction timestamp from log (last non-empty line)
     try:
         lines = [l.strip() for l in plog.read_text().splitlines() if l.strip()]
-        if not lines:
-            return True
-        last_line = lines[-1]
-        # Expect ISO timestamp as first field: "2026-03-09T19:30:00..."
-        last_ts_str = last_line.split("|")[0].strip().split()[0]
+    except Exception:
+        return True
+
+    if not lines:
+        return True
+
+    # --- LIVENESS: no prediction for 2+ consecutive 5-min windows ---
+    try:
+        last_ts_str = lines[-1].split("|")[0].strip().split()[0]
         from datetime import datetime, timezone
         last_ts = datetime.fromisoformat(last_ts_str.replace("Z", "+00:00")).timestamp()
-    except Exception:
-        return True  # can't parse, give benefit of doubt
-
-    gap = now - last_ts
-    missed_windows = int(gap // window_sec)
-
-    if missed_windows >= 2:
-        log(f"💀 LIVENESS FAIL: no prediction for {gap:.0f}s ({missed_windows} windows missed) — DELETING PROJECT")
-        try:
+        gap = time.time() - last_ts
+        missed = int(gap // 300)
+        if missed >= 2:
+            log(f"💀 LIVENESS FAIL: {missed} windows missed ({gap:.0f}s gap) — DELETING")
             shutil.rmtree(workspace)
-            log(f"Workspace {workspace} deleted.")
-        except Exception as e:
-            log(f"Delete failed: {e}")
-        return False
+            return False
+    except Exception:
+        pass
+
+    # --- ACCURACY: >50% wrong in last 12 verified predictions ---
+    verified = [l for l in lines if "correct=True" in l or "correct=False" in l]
+    if len(verified) >= 12:
+        last12 = verified[-12:]
+        wrong = sum(1 for l in last12 if "correct=False" in l)
+        pct_wrong = wrong / 12
+        log(f"Accuracy check: {12-wrong}/12 correct ({100*(1-pct_wrong):.0f}%) last 12")
+        if pct_wrong > 0.5:
+            log(f"💀 ACCURACY FAIL: {wrong}/12 wrong ({100*pct_wrong:.0f}%) > 50% threshold — DELETING")
+            shutil.rmtree(workspace)
+            return False
     return True
 
 def git_commit(repo_dir: Path, workspace: Path, iteration: int, log):
@@ -294,10 +300,9 @@ def run_loop(workspace: Path, repo_dir: Path, runner: BaseRunner,
     git_commit(repo_dir, workspace, iteration, log)
     log(f"=== LOOP {iteration} END (killed={killed}) ===\n")
 
-    # TODO: re-enable after testing 5m window predictions are working
-    # if not check_prediction_liveness(workspace, log):
-    #     log("Project deleted by liveness check. Stopping.")
-    #     sys.exit(1)
+    if not check_survival(workspace, log):
+        log("Project deleted by survival check. Stopping.")
+        sys.exit(1)
 
     return killed
 
