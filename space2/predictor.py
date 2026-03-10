@@ -260,8 +260,13 @@ def predict(candles):
         signals['alt'] = s
 
     # Last candle reversal (mean reversion — 5m candles alternate ~60-67%)
-    # EMERGENCY v17.6: boost from 0.15 to 0.20 — anti-phase trap survival
-    s = -last_dir * 0.20
+    # v17.7: trend-adaptive rev — reduce during strong trends (4+ streak)
+    # When market is clearly trending, alternation breaks down, rev fights trend
+    if streak_up >= 4 or streak_down >= 4:
+        rev_weight = 0.05  # heavily reduced during strong trends
+    else:
+        rev_weight = 0.20  # full weight during normal alternation
+    s = -last_dir * rev_weight
     score += s
     signals['rev'] = s
 
