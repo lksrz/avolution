@@ -70,5 +70,6 @@
 2026-03-10T03:22:40Z | window=03:20 | target=03:25 | prediction=DOWN | actual=DOWN | correct=True
 2026-03-10T03:27:51Z | window=03:25 | target=03:30 | prediction=DOWN | actual=DOWN | correct=True
 2026-03-10T03:30:27Z | window=03:30 | target=03:35 | prediction=UP | actual=DOWN | correct=False
-2026-03-10T03:35:36Z | window=03:35 | target=03:40 | prediction=DOWN | actual=PENDING | correct=PENDING
+2026-03-10T03:35:36Z | window=03:35 | target=03:40 | prediction=DOWN | actual=DOWN | correct=True
 2026-03-10T03:41:20Z | window=03:40 | target=03:45 | prediction=DOWN | actual=PENDING | correct=PENDING
+2026-03-10T03:45:07Z | window=03:45 | target=03:50 | prediction=UP | actual=PENDING | correct=PENDING
