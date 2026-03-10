@@ -7,6 +7,6 @@
   "prediction": "UP",
   "confidence": 0.5332355820501764,
   "reason": "mom+t5+t10+sma+rsi+ema+bb+alt+rev",
-  "predicted_at": "2026-03-10T06:15:50.299509+00:00",
-  "last_price": 69874.0
+  "predicted_at": "2026-03-10T06:16:12.690986+00:00",
+  "last_price": 69858.1
 }
