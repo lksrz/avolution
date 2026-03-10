@@ -227,12 +227,16 @@ def predict(candles):
     signals['t10'] = s
 
     # SMA deviation (mean revert) — continuous
-    s = max(-0.20, min(0.20, -price_vs_sma * 40))
+    # v17.8: dampen during strong trends to stop fighting trend
+    sma_mult = 15 if (streak_up >= 4 or streak_down >= 4) else 40
+    s = max(-0.20, min(0.20, -price_vs_sma * sma_mult))
     score += s
     signals['sma'] = s
 
     # RSI — continuous, centered at 50 (multiplier reduced to balance vs trend)
-    s = -(rsi - 50) / 100 * 0.22
+    # v17.8: dampen during strong trends
+    rsi_mult = 0.08 if (streak_up >= 4 or streak_down >= 4) else 0.22
+    s = -(rsi - 50) / 100 * rsi_mult
     score += s
     signals['rsi'] = s
 
@@ -242,7 +246,9 @@ def predict(candles):
     signals['ema'] = s
 
     # Bollinger Bands — continuous, centered at 0.5 (multiplier reduced to balance vs trend)
-    s = -(bb_pos - 0.5) * 0.22
+    # v17.8: dampen during strong trends
+    bb_mult = 0.08 if (streak_up >= 4 or streak_down >= 4) else 0.22
+    s = -(bb_pos - 0.5) * bb_mult
     score += s
     signals['bb'] = s
 
