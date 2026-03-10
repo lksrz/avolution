@@ -5,8 +5,8 @@
   "target_open_ts": 1773105900,
   "target_close_ts": 1773106200,
   "prediction": "UP",
-  "confidence": 0.5292713357805028,
+  "confidence": 0.5300562186576337,
   "reason": "mom+t5+t10+sma+rsi+ema+bb+cur+rev",
-  "predicted_at": "2026-03-10T01:21:58.176218+00:00",
-  "last_price": 68930.39
+  "predicted_at": "2026-03-10T01:22:18.684436+00:00",
+  "last_price": 68933.77
 }
