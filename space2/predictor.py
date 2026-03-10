@@ -215,8 +215,9 @@ def predict(candles):
     score += s
     signals['mom'] = s
 
-    # Price trend 5-candle — continuous, proportional (cap raised to compete with mean reversion)
-    s = max(-0.14, min(0.14, price_change_5 * 120))
+    # Price trend 5-candle — continuous, proportional
+    # EMERGENCY v17.6: cap reduced 0.14→0.10 to prevent overriding reversal
+    s = max(-0.10, min(0.10, price_change_5 * 120))
     score += s
     signals['t5'] = s
 
@@ -259,7 +260,8 @@ def predict(candles):
         signals['alt'] = s
 
     # Last candle reversal (mean reversion — 5m candles alternate ~60-67%)
-    s = -last_dir * 0.15
+    # EMERGENCY v17.6: boost from 0.15 to 0.20 — anti-phase trap survival
+    s = -last_dir * 0.20
     score += s
     signals['rev'] = s
 
